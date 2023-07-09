@@ -70,81 +70,7 @@
 <body>
     <!--START THE NAVBAR SECTION-->
     <div class="row">
-        <div class="col-md-2">
-            <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark dashboard" style="width: 280px">
-                <a href="/"
-                    class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                    <svg class="bi pe-none me-2" width="40" height="32">
-                        <use xlink:href="#bootstrap"></use>
-                    </svg>
-                    <span class="fs-4">Sidebar</span>
-                </a>
-                <hr>
-                <ul class="nav nav-pills flex-column mb-auto">
-                    <li class="nav-item">
-                        <a href="{{route('index')}}" class="nav-link active" aria-current="page">
-                            <svg class="bi pe-none me-2" width="16" height="16">
-                                <use xlink:href="#home"></use>
-                            </svg>
-                            Trang cá nhân
-                        </a>
-                    </li>
-                    <li>
-                        <div class="dropdown">
-                            <a href="#" class="nav-link text-white dropdown-toggle" data-bs-toggle="dropdown"><svg
-                                    class="bi pe-none me-2" width="16" height="16">
-                                    <use xlink:href="#speedometer2"></use>
-                                </svg>
-                                Bán hàng</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="">Khách hàng</a></li>
-                                <li><a class="dropdown-item" href="{{route('sanpham')}}">Sản phẩm</a></li>
-                                <li><a class="dropdown-item" href="hoadon.html">Hóa đơn</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="dropdown">
-                            <a href="#" class="nav-link text-white dropdown-toggle" data-bs-toggle="dropdown"><svg
-                                    class="bi pe-none me-2" width="16" height="16">
-                                    <use xlink:href="#speedometer2"></use>
-                                </svg>
-                                Quản lý</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="quanlynhanvien.html">Nhân viên</a></li>
-                                <li><a class="dropdown-item" href="quanlykhachhang.html">Khách hàng</a></li>
-                                <li><a class="dropdown-item" href="quanlysanphamquay.html">Sản phẩm quầy</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li>
-                        <a href="thongke.html" class="nav-link text-white">
-                            <svg class="bi pe-none me-2" width="16" height="16">
-                                <use xlink:href="#table"></use>
-                            </svg>
-                            Thống kê
-                        </a>
-                    </li>
-                </ul>
-                <hr>
-                <div class="dropdown">
-                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://github.com/mdo.png" alt="" width="32" height="32"
-                            class="rounded-circle me-2">
-                            <h5>{{Session::get('user')->email;}}</h5>
-
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                        <li><a class="dropdown-item" href="index.html">Profile</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="{{ route('logout') }}">Sign out</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        @include('includes.drop_quanly')
         <div class="col-md-10">
           <div class="container-fluid">
               <h1 class="display-4 my-4 text-info">List of products</h1>
@@ -160,6 +86,8 @@
                           <th>Tên</th>
                           <th>Số lượng</th>
                           <th>Giá</th>
+                          <th>Giá gốc</th>
+
                           <th>Thao tác</th>
                       </tr>
                   </thead>
@@ -172,7 +100,7 @@
 
 
         <!--START INFO SECTION-->
-      
+
     </div>
     <div id="myModal" class="modal">
       <div class="modal-content" style="text-align: center">
@@ -181,6 +109,8 @@
               @csrf
               <input type="text" id="name" name="name" placeholder="Tên" required><br><br>
               <input type="number" id="quantity" name="quantity" placeholder="Số lượng" required><br><br>
+              <input type="number" id="price_cost" name="price_cost" placeholder="Giá gốc" required><br><br>
+
               <input type="number" id="price" name="price" placeholder="Giá" required><br><br>
               <button>Thêm</button>
           </form>
@@ -213,6 +143,7 @@
                       $("<td></td>").text(product.name).appendTo(row);
                       $("<td></td>").text(product.quantity).appendTo(row);
                       $("<td></td>").text(product.price).appendTo(row);
+                      $("<td></td>").text(product.price_cost).appendTo(row);
 
                       var actionsColumn = $("<td class='actions'></td>");
 
@@ -249,6 +180,8 @@
                                   $("#name").val(ketqua.products[0].name);
                                   $("#quantity").val(ketqua.products[0].quantity);
                                   $("#price").val(ketqua.products[0].price);
+                                  $("#price_cost").val(ketqua.products[0].price_cost);
+
                               });
                               openModal();
                           });
@@ -268,7 +201,7 @@
 
           $.ajax({
               url: route,
-             
+
           }).done(function(ketqua) {
               $("#mytable tbody").empty();
 
@@ -282,6 +215,7 @@
                   $("<td></td>").text(product.name).appendTo(row);
                   $("<td></td>").text(product.quantity).appendTo(row);
                   $("<td></td>").text(product.price).appendTo(row);
+                  $("<td></td>").text(product.price_cost).appendTo(row);
 
                   var actionsColumn = $("<td class='actions'></td>");
 
@@ -316,6 +250,8 @@
                               $("#name").val(ketqua.products[0].name);
                               $("#quantity").val(ketqua.products[0].quantity);
                               $("#price").val(ketqua.products[0].price);
+                              $("#price_cost").val(ketqua.products[0].price_cost);
+
                           });
                           openModal();
                       });
@@ -330,7 +266,7 @@
           });
 
       });
-   
+
       var modal = document.getElementById("myModal");
       var btn = document.getElementsByTagName("button")[0];
       var span = document.getElementsByClassName("close")[0];

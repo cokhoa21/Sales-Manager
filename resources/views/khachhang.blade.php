@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Final Project</title>
-    <link rel="stylesheet" 
-    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"> 
-  <script 
-    src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js">    
-  </script>        
+    <link rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <script
+    src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js">
+  </script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
   </script>
   <!-- DataTables -->
-  <link rel="stylesheet" 
-    type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css"> 
-  <script type="text/javascript" 
-    charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js">    
+  <link rel="stylesheet"
+    type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+  <script type="text/javascript"
+    charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js">
   </script>
   <!-- My CSS and JQuery -->
   <link href="./assets/css/style.css" rel="stylesheet">
@@ -39,13 +39,9 @@
                   </li>
                   <li>
                     <div class="dropdown">
-                        <a href="#" class="nav-link text-white dropdown-toggle" data-bs-toggle="dropdown"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                        <a href="." class="nav-link text-white " ><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
                             Bán hàng</a>
-                        <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" href="khachhang.html">Khách hàng</a></li>
-                          <li><a class="dropdown-item" href="sanpham.html">Sản phẩm</a></li>
-                          <li><a class="dropdown-item" href="hoadon.html">Hóa đơn</a></li>
-                        </ul>
+
                     </div>
                   </li>
                   <li>
@@ -53,9 +49,9 @@
                         <a href="#" class="nav-link text-white dropdown-toggle" data-bs-toggle="dropdown"><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
                             Quản lý</a>
                         <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" href="quanlynhanvien.html">Nhân viên</a></li>
-                          <li><a class="dropdown-item" href="quanlykhachhang.html">Khách hàng</a></li>
-                          <li><a class="dropdown-item" href="quanlysanphamquay.html">Sản phẩm quầy</a></li>
+                            <li><a class="dropdown-item" href="{{route('nhanvien')}}">Nhân viên</a></li>
+                            <li><a class="dropdown-item" href="{{route('nhanvien')}}">Khách hàng</a></li>
+                            <li><a class="dropdown-item" href="{{route('sanpham')}}">Sản phẩm</a></li>
                         </ul>
                     </div>
                   </li>
@@ -92,8 +88,8 @@
                       <th scope="col">Address</th>
                       <th scope="col">Phone</th>
                     </tr>
-                  </thead>  
-                  <tbody>      
+                  </thead>
+                  <tbody>
                   </tbody>
                 </table>
                 <button type="button" class="btn btn-primary" id="btnReloadData">Reload data</button>

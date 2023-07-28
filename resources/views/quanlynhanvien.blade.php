@@ -73,7 +73,7 @@
         @include('includes.drop_quanly')
         <div class="col-md-10">
             <div class="container-fluid">
-                <h1 class="display-4 my-4 text-info">List of employee</h1>
+                <h1 class="display-4 my-4 text-info">Danh sách nhân viên</h1>
 
                 <button onclick="openModal()">Thêm</button>
 
@@ -84,7 +84,11 @@
                         <tr>
                             <th>ID</th>
                             <th>Email</th>
-                            <th>chức vụ</th>
+                            <th>Tên</th>
+                            <th>Giới tính</th>
+                            <th>SDT</th>
+                            <th>Địa chỉ</th>
+                            <th>Chức vụ</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
@@ -105,6 +109,11 @@
             <form id="form" action="{{ route('add_employee') }}" method="post">
                 @csrf
                 <input type="email" id="email" name="email" placeholder="Email" required><br><br>
+                <input type="text" id="name" name="name" placeholder="Tên nhân viên" required><br><br>
+                <input type="text" id="gender" name="gender" placeholder="Giới tính" required><br><br>
+                <input type="text" id="sdt" name="sdt" placeholder="sdt" required><br><br>
+                <input type="text" id="address" name="address" placeholder="Địa chỉ" required><br><br>
+
                 <button>Thêm</button>
             </form>
         </div>
@@ -134,8 +143,17 @@
 
 
                         $("<td></td>").text(product.id).appendTo(row);
-                        $("<td></td>").text(product.email).appendTo(row);
-                        $("<td></td>").text('Nhân viên').appendTo(row);
+                    $("<td></td>").text(product.email).appendTo(row);
+                    $("<td></td>").text(product.name).appendTo(row);
+                    $("<td></td>").text(product.gender).appendTo(row);
+                    $("<td></td>").text(product.sdt).appendTo(row);
+                    $("<td></td>").text(product.address).appendTo(row);
+                        if(product.role == 1){
+                            $("<td></td>").text('Admin').appendTo(row);
+                        }
+                        else{
+                            $("<td></td>").text('Nhân viên').appendTo(row);
+                        }
                         var actionsColumn = $("<td class='actions'></td>");
 
                         var route_delete = `${window.location.origin}/delete_users/` +  product.id;
@@ -166,6 +184,11 @@
                                     $('#form').attr('action', '/edit_users/' + ketqua
                                         .products[0].id);
                                         $("#email").val(ketqua.products[0].email);
+                                        $("#name").val(ketqua.products[0].name);
+                                        $("#sdt").val(ketqua.products[0].sdt);
+                                        $("#gender").val(ketqua.products[0].gender);
+                                        $("#address").val(ketqua.products[0].address);
+
                                 });
                                 openModal();
                             });
@@ -193,7 +216,17 @@
 
                     $("<td></td>").text(product.id).appendTo(row);
                     $("<td></td>").text(product.email).appendTo(row);
-                    $("<td></td>").text('Nhân viên').appendTo(row);
+                    $("<td></td>").text(product.name).appendTo(row);
+                    $("<td></td>").text(product.gender).appendTo(row);
+                    $("<td></td>").text(product.sdt).appendTo(row);
+                    $("<td></td>").text(product.address).appendTo(row);
+
+                    if(product.role == 1){
+                            $("<td></td>").text('Admin').appendTo(row);
+                        }
+                        else{
+                            $("<td></td>").text('Nhân viên').appendTo(row);
+                        }
 
                     var actionsColumn = $("<td class='actions'></td>");
 
@@ -223,7 +256,12 @@
                                 $('#form').attr('method', 'get');
                                 $('#form').attr('action', '/edit_users/' + ketqua
                                     .products[0].id);
-                                $("#email").val(ketqua.products[0].email);
+                                    $("#email").val(ketqua.products[0].email);
+                                        $("#name").val(ketqua.products[0].name);
+                                        $("#sdt").val(ketqua.products[0].sdt);
+                                        $("#gender").val(ketqua.products[0].gender);
+                                        $("#address").val(ketqua.products[0].address);
+
                             });
                             openModal();
                         });
@@ -243,7 +281,9 @@
         var btn = document.getElementsByTagName("button")[0];
         var span = document.getElementsByClassName("close")[0];
 
+     
         function openModal() {
+
             modal.style.display = "block";
         }
 

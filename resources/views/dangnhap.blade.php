@@ -8,6 +8,73 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/fontawesome.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        /* CSS cho modal */
+        .modal {
+            display: none;
+            /* Ẩn modal mặc định */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        @keyframes blink {
+            0% { background-color: blue; }
+            50% { background-color: white; }
+            100% { background-color: blue; }
+        }
+
+        .blinking-button {
+            animation: blink 1s infinite;
+        }
+    </style>
 </head>
 
 <body>
@@ -26,6 +93,11 @@
                         @if (session('errors'))
                             <div class="alert alert-danger">
                                 Tài khoản hoặc mật khẩu không chính xác
+                            </div>
+                        @endif
+                        @if (session('sucsses'))
+                            <div class="alert alert-succses">
+                                Mật khẩu mới đã được gửi về mail
                             </div>
                         @endif
                         <form method="POST" action="{{ route('login') }}">
@@ -56,26 +128,55 @@
 
                                 <div class="col">
                                     <!-- Simple link -->
-                                    <a href="#!">Quên mật khẩu?</a>
+                                    <a class="js-missing-pass" onclick="openModal()">Quên mật khẩu?</a>
                                 </div>
                             </div>
 
                             <!-- Submit button -->
-                            <button type="submit" class="btn btn-primary btn-block mb-4" id="login">Đăng
+                            <button type="submit" class="btn btn-primary btn-block mb-4 blinking-button" id="login">Đăng
                                 nhập</button>
-                            <a href="dangky.html"><button type="button" class="btn btn-primary btn-block mb-4">Đăng
-                                    ký</button></a>
+                           
                         </form>
-
                         <?php if (isset($error)): ?>
                         <div class="alert alert-danger"><?php echo $error; ?></div>
                         <?php endif; ?>
                     </div>
                 </div>
             </div>
+                <div id="myModal" class="modal">
+                <div class="modal-content modal-sm" style="justify-content: center; align-items:center">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <form id="form" action="{{ route('miss_pass') }}" method="get">
+                        <span>Sau khi nhập tài khoản và ấn xác nhận thì mật khẩu sẽ được gửi về gmail của bạn</span>
+                        @csrf
+                        <div>
+                            Tài khoản: <span class="js-name-customer"></span>
+                        </div>
+                        <input type="email" name="email" id="email">
+                    
+                        <div class="d-flex mt-3 justify-center">
+                            <button class="js-confirm">Xác nhận</button>
+        
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </section>
     <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script>
+        var modal = document.getElementById("myModal");
+
+        function openModal() {
+            modal.style.display = "block";
+        }
+
+        function closeModal() {
+            $('#form').attr('method', 'post');
+            $('#form').attr('action', 'add_products');
+            modal.style.display = "none";
+        }
+    </script>
 </body>
 
 </html>

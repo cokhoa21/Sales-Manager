@@ -87,25 +87,32 @@
     @include('includes.drop_quanly')
     <div class="col-md-10">
         <div class="container-fluid">
-            <form class="mt-2" action="{{route('thongkenhanvien')}}">
-                    <div class="d-flex">
-                        Từ ngày
-                        <input  style="margin-left:8px" value="{{$dateStart}}" type="date" name="date_start">
-                    
-                    </div>
-                    <div>
-                        Đến ngày
-                    <input style="margin-left:8px"  value="{{$dateEnd}}" type="date" name="date_end">
-
-                    </div>
-                    <button class="btn btn-primary"> Lọc</button>
-            </form>
-            <h1 class="display-4 my-4 text-info">Thống kê doanh thu nhân viên</h1>
-            <div class="chart-container">
-                <canvas id="myChart"></canvas>
-            </div>
+            <h1 class="display-4 my-4 text-info">Đơn hàng chi tiết</h1>
+            <table class="table table-striped" id="users" style="width: 100%;">
+                <thead >
+                <tr id="list-header">
+                    <th scope="col">STT</th>
+                    <th scope="col">Tên sản phẩm</th>
+                    <th scope="col">Số lượng</th>
+                    <th scope="col">tổng giá bán</th>
+                    <th scope="col">tổng giá nhập</th>
+                </tr>
+                </thead>
+                <tbody>
+                 @foreach($data as $key => $value)
+                     <tr id="list-header">
+                            <th scope="col">{{$key+1}}</th>
+                            <th scope="col">{{$value->name}}</th>
+                            <th scope="col">{{$value->quality}}</th>
+                            <th scope="col">{{$value->total_price}}</th>
+                            <th scope="col">{{$value->total_cost}}</th>
+                     </tr>
+                 @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
+
 
     <!--START INFO SECTION-->
 
@@ -115,49 +122,6 @@
 
 <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
 <script>
-    var StringDat = "{{($chartData)}}"
-    var StringLabel = "{{$chartLabel}}"
-
-    var arrdata = StringDat.split(",")
-    var arrlabel = StringLabel.split(",")
-
-    var data = {
-        labels:arrlabel,
-        datasets: [{
-            label: "Tổng doanh thu bán được",
-            backgroundColor: "rgba(136,213,126,0.2)",
-            borderColor: "rgb(72,216,104)",
-            borderWidth: 2,
-            hoverBackgroundColor: "rgba(131,223,143,0.4)",
-            hoverBorderColor: "rgb(108,213,91)",
-            data: arrdata
-        }]
-    };
-
-    var options = {
-        maintainAspectRatio: false,
-        scales: {
-            y: {
-                stacked: true,
-                grid: {
-                    display: true,
-                    color: "rgba(255,99,132,0.2)"
-                }
-            },
-            x: {
-                grid: {
-                    display: false
-                }
-            }
-        }
-    };
-
-    new Chart('myChart', {
-        type: 'bar',
-        options: options,
-        data: data
-    });
-
 </script>
 </body>
 

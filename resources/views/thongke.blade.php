@@ -87,7 +87,7 @@
     @include('includes.drop_quanly')
     <div class="col-md-10">
         <div class="container-fluid">
-            <h1 class="display-4 my-4 text-info">Biểu đồ thông kê</h1>
+            <h1 class="display-4 my-4 text-info">Thống kê</h1>
             <div class="chart-container">
                 <canvas id="chart"></canvas>
             </div>
@@ -136,7 +136,7 @@
     var arrdata = StringDat.split(",")
     console.log(arrdata)
     var data = {
-        labels: ["6 ngày trước", "5 ngày trước", "3 ngày trước", "3 ngày trước", "2 ngày trước", "1 ngày trước", "Hôm nay"],
+        labels: ["6 ngày trước", "5 ngày trước", "4 ngày trước", "3 ngày trước", "2 ngày trước", "1 ngày trước", "Hôm nay"],
         datasets: [{
             label: "Sản phẩm bán được trong ngày",
             backgroundColor: "rgba(255,99,132,0.2)",

@@ -87,7 +87,7 @@
     @include('includes.drop_quanly')
     <div class="col-md-10">
         <div class="container-fluid">
-            <h1 class="display-4 my-4 text-info">List of users</h1>
+            <h1 class="display-4 my-4 text-info">Sản phẩm bán chạy</h1>
             <table class="table table-striped" id="users" style="width: 100%;">
                 <thead >
                 <tr id="list-header">

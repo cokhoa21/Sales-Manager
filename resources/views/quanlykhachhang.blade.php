@@ -73,7 +73,7 @@
     @include('includes.drop_quanly')
     <div class="col-md-10">
         <div class="container-fluid">
-            <h1 class="display-4 my-4 text-info">List of employee</h1>
+            <h1 class="display-4 my-4 text-info">Danh sách khách hàng</h1>
 
             <button onclick="openModal()">Thêm</button>
 
@@ -86,6 +86,7 @@
                     <th>Ten khach hang</th>
                     <th>SDT/EMAIL</th>
                     <th>DIA CHI</th>
+                    <th>Note</th>
                     <th>Thao tac</th>
                 </tr>
                 </thead>
@@ -106,10 +107,10 @@
         <form id="form" action="{{ route('add_customer') }}" method="post">
             @csrf
             <input type="text" id="name" name="name" placeholder="Ten khach hang" required><br><br>
-            <input type="email" id="email" name="email" placeholder="Email" required><br><br>
-            <input type="text" id="phone" name="phone" placeholder="SDT" required><br><br>
-            <input type="text" id="address" name="address" placeholder="Dia chi" required><br><br>
-
+            <input type="email" id="email" name="email" placeholder="Email" ><br><br>
+            <input type="text" id="phone" name="phone" placeholder="SDT" ><br><br>
+            <input type="text" id="address" name="address" placeholder="Dia chi" ><br><br>
+            <input type="text" id="note" name="note" placeholder="Note" ><br><br>
             <button>Thêm</button>
         </form>
     </div>
@@ -138,10 +139,10 @@
                     var row = $("<tr></tr>");
 
                     $("<td></td>").text(product.id).appendTo(row);
-
                     $("<td></td>").text(product.name).appendTo(row);
                     $("<td></td>").text(product.email + ' - ' + product.phone).appendTo(row);
                     $("<td></td>").text(product.address).appendTo(row);
+                    $("<td></td>").text(product.note).appendTo(row);
                     var actionsColumn = $("<td class='actions'></td>");
 
                     var route_delete = `${window.location.origin}/delete_customer/` +  product.id;
@@ -174,6 +175,7 @@
                                 $("#name").val(ketqua.products[0].name);
                                 $("#phone").val(ketqua.products[0].phone);
                                 $("#address").val(ketqua.products[0].address);
+                                $("#note").val(ketqua.products[0].note);
 
                             });
                             openModal();
@@ -199,11 +201,10 @@
 
                 var row = $("<tr></tr>");
                 $("<td></td>").text(product.id).appendTo(row);
-
                 $("<td></td>").text(product.name).appendTo(row);
                 $("<td></td>").text(product.email + ' - ' + product.phone).appendTo(row);
                 $("<td></td>").text(product.address).appendTo(row);
-
+                $("<td></td>").text(product.note).appendTo(row);
                 var actionsColumn = $("<td class='actions'></td>");
 
                 var route_delete = `${window.location.origin}/delete_customer/` + product.id;
@@ -236,6 +237,7 @@
                             $("#name").val(ketqua.products[0].name);
                             $("#phone").val(ketqua.products[0].phone);
                             $("#address").val(ketqua.products[0].address);
+                            $("#note").val(ketqua.products[0].note);
                         });
                         openModal();
                     });

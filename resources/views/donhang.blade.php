@@ -73,7 +73,7 @@
         @include('includes.drop_quanly')
         <div class="col-md-10">
           <div class="container-fluid">
-              <h1 class="display-4 my-4 text-info">List of products</h1>
+              <h1 class="display-4 my-4 text-info">Đơn hàng</h1>
 
               <button onclick="openModal()">Tạo đơn hàng</button>
 
@@ -82,11 +82,9 @@
               <table id="tableProduct" style="width: 100%;text-align: center">
                   <thead>
                       <tr>
-                          <th>ID</th>
+                          <th>Mã đơn hàng</th>
                           <th>Tên Khách hàng</th>
-                          <th>Tên sản phẩm</th>
-                          <th>Số lượng</th>
-                          <th>Giá</th>
+                          <th>Tổng giá tiền</th>
                           @if(Session::get('user')->role == 1)
                           <th>Thao tác</th>
                             @endif
@@ -95,10 +93,9 @@
                   <tbody>
                         @foreach ($bill as $item)
                             <tr>
-                                <td>{{$item->id}}</td>
+                                <td><a href="{{route('bill_detail',['id' =>$item->id])}}"> {{$item->id}} </a></td>
                                 <td class="js-name">{{$item->customer_name}}</td>
-                                <td>{{$item->product_name}}</td>
-                                <td>{{$item->quality}}</td>
+                        
                                 <td>{{$item->total_price}}</td>
                                 @if(Session::get('user')->role == 1)
                                 <td class="actions">

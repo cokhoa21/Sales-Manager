@@ -87,7 +87,7 @@
     @include('includes.drop_quanly')
     <div class="col-md-10">
         <div class="container-fluid">
-            <h1 class="display-4 my-4 text-info">Biểu đồ thông kê lợi nhuận</h1>
+            <h1 class="display-4 my-4 text-info">Thống kê lợi nhuận</h1>
         <div>
             <form id="form-select-time" action="{{route('thongkeloinhuan')}}" method="get">
                 <select name="time" onchange="myFunction()">
@@ -95,6 +95,8 @@
                     <option class="js-select-time" value="7" @if($timeSelect == 7) selected @endif>7 ngày gần nhất</option>
                     <option class="js-select-time" value="15" @if($timeSelect == 15) selected @endif>15 ngày gần nhất</option>
                     <option class="js-select-time" value="30" @if($timeSelect == 30) selected @endif>30 ngày gần nhất</option>
+                    <option class="js-select-time" value="year" @if($timeSelect == "year") selected @endif>Trong năm nay</option>
+
                 </select>
             </form>
         </div>
@@ -134,7 +136,7 @@
 
 
     var myChart = new Chart(ctx, {
-        type: 'line',
+        type: 'bar',
         data: {
             labels: arrlabel,
             datasets: [
@@ -152,7 +154,7 @@
                     data: arrdata2, // Specify the data values array
                     fill: false,
                     borderColor: '#1bc508', // Add custom color border (Line)
-                    backgroundColor: '#fff', // Add custom color background (Points and Fill)
+                    backgroundColor: '#1bc508', // Add custom color background (Points and Fill)
                     borderWidth: 1 // Specify bar border width
                 }
             ]},

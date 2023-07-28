@@ -73,17 +73,24 @@
         @include('includes.drop_quanly')
         <div class="col-md-10">
           <div class="container-fluid">
-              <h1 class="display-4 my-4 text-info">List of products</h1>
+              <h1 class="display-4 my-4 text-info">Danh sách sản phẩm</h1>
 
               <button onclick="openModal()">Thêm</button>
 
               <input type="text" id="search" placeholder="Tìm kiếm">
-
+              <select id="select_type_search">
+                <option value="products.name">Tên sản phẩm</option>
+                <option value="products.id">Mã sản phẩm</option>
+                <option value="brands.name">Nhà cung cấp</option>
+              </select>
               <table id="mytable" style="width: 100%;text-align: center">
                   <thead>
                       <tr>
                           <th>ID</th>
                           <th>Tên</th>
+                          <th>Danh mục </th>
+                          <th>Thương hiệu </th>
+
                           <th>Số lượng</th>
                           <th>Giá</th>
                           <th>Giá gốc</th>
@@ -109,9 +116,23 @@
               @csrf
               <input type="text" id="name" name="name" placeholder="Tên" required><br><br>
               <input type="number" id="quantity" name="quantity" placeholder="Số lượng" required><br><br>
+              <select id="jscategory" name="category">
+                @foreach($categorys as $item)
+                    <option value="{{$item->id}}">{{$item->name}}</option>
+                @endforeach
+            </select>
+            <select id="sup" name="sup">
+                @foreach($sup as $item)
+                    <option value="{{$item->id}}">{{$item->name}}</option>
+                @endforeach
+            </select>
+
+           
               <input type="number" id="price_cost" name="price_cost" placeholder="Giá gốc" required><br><br>
 
               <input type="number" id="price" name="price" placeholder="Giá" required><br><br>
+
+
               <button>Thêm</button>
           </form>
       </div>
@@ -123,12 +144,13 @@
           $('#search').on('keyup', function() {
               var value = $(this).val();
               var route = `${window.location.origin}/api/sanpham`;
-
+              var type = $('#select_type_search').val()
               $.ajax({
                   url: route,
                   type: 'get',
                   data: {
                       id: value,
+                      type: type,
                   }
               }).done(function(ketqua) {
                   $("#mytable tbody").empty();
@@ -141,8 +163,11 @@
 
                       $("<td></td>").text(product.id).appendTo(row);
                       $("<td></td>").text(product.name).appendTo(row);
+                      $("<td></td>").text(product.category).appendTo(row);
+                      $("<td></td>").text(product.supname).appendTo(row);
                       $("<td></td>").text(product.quantity).appendTo(row);
                       $("<td></td>").text(product.price).appendTo(row);
+
                       $("<td></td>").text(product.price_cost).appendTo(row);
 
                       var actionsColumn = $("<td class='actions'></td>");
@@ -173,12 +198,15 @@
                                       id: value,
                                   }
                               }).done(function(ketqua) {
+
                                   $('#form').attr('method', 'get');
                                   $('#form').attr('action', '/edit/' + ketqua
                                       .products[0].id);
-
-                                  $("#name").val(ketqua.products[0].name);
+                                  $("#name").val(ketqua.products[0].category_id);
                                   $("#quantity").val(ketqua.products[0].quantity);
+                                  $('#jscategory option[value="' + ketqua.products[0].category_id + '"]').attr('selected','selected');
+                                  $('#sup option[value="' + ketqua.products[0].supplier + '"]').attr('selected','selected');
+
                                   $("#price").val(ketqua.products[0].price);
                                   $("#price_cost").val(ketqua.products[0].price_cost);
 
@@ -213,6 +241,8 @@
 
                   $("<td></td>").text(product.id).appendTo(row);
                   $("<td></td>").text(product.name).appendTo(row);
+                  $("<td></td>").text(product.category).appendTo(row);
+                  $("<td></td>").text(product.supname).appendTo(row);
                   $("<td></td>").text(product.quantity).appendTo(row);
                   $("<td></td>").text(product.price).appendTo(row);
                   $("<td></td>").text(product.price_cost).appendTo(row);
@@ -243,12 +273,18 @@
                                   id: value,
                               }
                           }).done(function(ketqua) {
+
                               $('#form').attr('method', 'get');
                               $('#form').attr('action', '/edit/' + ketqua
                                   .products[0].id);
+                         
 
                               $("#name").val(ketqua.products[0].name);
                               $("#quantity").val(ketqua.products[0].quantity);
+                              console.log($('#form'));
+                              $('#jscategory option[value="' + ketqua.products[0].category_id + '"]').attr('selected','selected');
+                              $('#sup option[value="' + ketqua.products[0].supplier + '"]').attr('selected','selected');
+
                               $("#price").val(ketqua.products[0].price);
                               $("#price_cost").val(ketqua.products[0].price_cost);
 
@@ -270,6 +306,8 @@
       var modal = document.getElementById("myModal");
       var btn = document.getElementsByTagName("button")[0];
       var span = document.getElementsByClassName("close")[0];
+
+
 
       function openModal() {
           modal.style.display = "block";

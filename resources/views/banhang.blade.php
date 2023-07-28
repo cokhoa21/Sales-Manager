@@ -64,6 +64,10 @@
             text-decoration: none;
             cursor: pointer;
         }
+        .col-md-5{
+            border:1px solid #c9c9c9;
+            border-radius:8px;
+        }
     </style>
 </head>
 
@@ -74,20 +78,26 @@
     <div class="col-md-5">
         <div class="container-fluid">
             <h1 class="display-4 my-4 text-info" style="height: 100px;">Sản phẩm</h1>
-
-
+            
             <div class="d-flex mt-5">
+                <select class="js-option-product">
+                    <option value="id">Theo mã ID</option>
+                    <option value="name">Theo tên Sản phẩm</option>
+                    <option value="sup">Theo nhà cung cấp</option>
+                </select>
                 <input type="text" id="search-product" placeholder="Tìm kiếm">
                 <div style="margin-left:auto">
-                Số sản phẩm đã chọn: <span class="js-number-product fw-bold">0</span>
+                    Số sản phẩm đã chọn: <span class="js-number-product fw-bold">0</span>
+                </div>
             </div>
-            </div>
+           
 
             <table id="tableProduct" style="width: 100%;text-align: center">
                 <thead>
                 <tr>
                     <th>ID</th>
                     <th>Tên</th>
+                    <th>Nhà Cung cấp </th>
                     <th>Số lượng</th>
                     <th>Giá</th>
                     <th>Thao tác</th>
@@ -96,13 +106,16 @@
                 <tbody>
                 @foreach($products as $cus)
                     <tr>
-                        <td>
+                        <td class="js-id">
                             {{$cus->id}}
                         </td>
                         <td class="js-name">
                             {{$cus->name}}
                         </td>
-                        <td>
+                        <td class="js-sup">
+                            {{$cus->supplier}}
+                        </td>
+                        <td class="js-quality">
                             {{$cus->quantity}}
                         </td>
                         <td class="js-price">
@@ -117,65 +130,73 @@
             </table>
         </div>
     </div>
-        <div class="col-md-5">
-            <div class="container-fluid">
-                <div class="d-flex justify-content-between align-center">
-                    <h1 class="display-4 my-4 text-info">Khách hàng</h1>
-                    <div class="d-flex flex-column justify-content-between p-2">
+    <div class="col-md-5">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-center">
+                <h1 class="display-4 my-4 text-info">Khách hàng</h1>
+                <div class="d-flex flex-column justify-content-between p-2">
 
-                        <button class="btn btn-warning js-reset" style="height: 40px">Đặt lại</button>
-                    <button class="btn btn-success js-thanhtoan" style="height: 40px">Thanh toán</button>
+                    <button class="btn btn-warning js-reset" style="height: 40px">Đặt lại</button>
+                <button class="btn btn-success js-thanhtoan" style="height: 40px">Thanh toán</button>
 
-                    </div>
                 </div>
-
-
-                <div class="d-flex mt-5">
-                    <input type="text" id="search-customer" placeholder="Tìm kiếm">
-                    <div style="margin-left:auto">
-                        Số khách hàng đã chọn: <span class="js-number-customer fw-bold">0</span>
-                    </div>
-                </div>
-
-                <table id="tableCustomer" style="width: 100%;text-align: center">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Tên</th>
-                        <th>EMAIL/SDT</th>
-                        <th>Địa chỉ</th>
-                        <th>Thao tác</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($customers as $cus)
-                        <tr>
-                            <td>
-                                {{$cus->id}}
-                            </td>
-                            <td class="js-name">
-                                {{$cus->name}}
-                            </td>
-                            <td>
-                                {{$cus->email}} / {{$cus->phone}}
-                            </td>
-                            <td>
-                                {{$cus->address}}
-                            </td>
-                            <td>
-                                <input type="radio" value="{{$cus->id}}" name="customer">
-                            </td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
             </div>
+
+
+            <div class="d-flex mt-5">
+            <select class="js-option-customer">
+                    <option value="id">Theo mã ID</option>
+                    <option value="name">Theo tên khách hàng</option>
+                </select>
+                <input type="text" id="search-customer" placeholder="Tìm kiếm">
+                <div style="margin-left:auto">
+                    Số khách hàng đã chọn: <span class="js-number-customer fw-bold">0</span>
+                </div>
+            </div>
+
+            <table id="tableCustomer" style="width: 100%;text-align: center">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên</th>
+                    <th>EMAIL/SDT</th>
+                    <th>Địa chỉ</th>
+                    <th>Note</th>
+                    <th>Thao tác</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($customers as $cus)
+                    <tr>
+                        <td class="js-id">
+                            {{$cus->id}}
+                        </td>
+                        <td class="js-name">
+                            {{$cus->name}}
+                        </td>
+                        <td>
+                            {{$cus->email}} / {{$cus->phone}}
+                        </td>
+                        <td>
+                            {{$cus->address}}
+                        </td>
+                        <td>
+                            {{$cus->note}}
+                        </td>
+                        <td>
+                            <input type="radio" value="{{$cus->id}}" name="customer">
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
         </div>
+    </div>
 
 
         <!--START INFO SECTION-->
 
-    </div>
+    <!-- </div> -->
     <div id="myModal" class="modal">
         <div class="modal-content modal-sm" style="justify-content: center; align-items:center">
             <span class="close" onclick="closeModal()">&times;</span>
@@ -208,9 +229,11 @@
         var modal = document.getElementById("myModal");
         $(document).on("keyup", '#search-customer', function (e) {
             let search = $(e.target).val();
+            let $select = $('.js-option-customer').val();
+            let $class = '.js-' + $select;
             if (search.length >= 0) {
                 $('#tableCustomer tbody tr').each((index, element) => {
-                    let titleSearch = $(element).find('.js-name').html().toLowerCase();
+                    let titleSearch = $(element).find($class).html().toLowerCase();
 
                     if (titleSearch.indexOf(search.toLowerCase()) !== -1) {
                         $(element).removeClass('d-none');
@@ -225,11 +248,22 @@
         });
         $(document).on('click','.js-confirm',function (e) {
             e.preventDefault();
-            let $customerGive = $('#price_cus_give').val();
-            let $totalBill = $('.js-total-bill').html();
-            if($customerGive < $totalBill){
+            let $customerGive = parseInt($('#price_cus_give').val());
+            let $totalBill = parseInt($('.js-total-bill').html());
+            let $list =  $(document).find('.js-quality-product');
+            let $status = 0;
+            $list.each((index,element) => {
+                let $this = $(element);
+                let $item = $(element).parent().find(".js_quality").val();
+                if(parseInt($this.val()) > parseInt($item )){
+                    alert('Số lượng sản phẩm '+ $(element).parent().find(".js-p-name").html().trim() + " vượt quá số lượng trong kho" );
+                    
+                    $status = 1;
+                }
+            });
+            if($status == 0 ){
+                if($customerGive < $totalBill){
                 alert('Tiền khách đưa không đủ');
-                document.location.reload();
                 return false;
             }else if($customerGive > $totalBill){
                 alert('Trả lại tiền thừa: ' + ($customerGive - $totalBill));
@@ -246,16 +280,20 @@
                         alert(data.message);
                         location.reload();
                     } else {
-                        alert(data.message);
+                        // alert(data.message);
                     }
                 }
             });
+            }
+        
         })
         $(document).on("keyup", '#search-product', function (e) {
             let search = $(e.target).val();
+            let $select = $('.js-option-product').val();
+            let $class = '.js-' + $select;
             if (search.length >= 0) {
                 $('#tableProduct tbody tr').each((index, element) => {
-                    let titleSearch = $(element).find('.js-name').html().toLowerCase();
+                    let titleSearch = $(element).find($class).html().toLowerCase();
 
                     if (titleSearch.indexOf(search.toLowerCase()) !== -1) {
                         $(element).removeClass('d-none');
@@ -282,11 +320,19 @@
            if($('input[type="checkbox"]:checked').length ==0 || $('input[type="radio"]:checked').length ==0) {
                alert('Bạn chọn thiếu mục, vui lòng chọn đủ cả sản phẩm và khách hàng')
            }else if ($('input[type="checkbox"]:checked').length > 0 && $('input[type="radio"]:checked').length ==1) {
+                $('.js-total-bill').html('');
+                $('.js-product-list').html('');
+                $('#customer_id').val('');
+                $('.js-name-customer').html('');
+                $('#price_cus_give').val('');
+
+
                let $dataProduct = $('input[type="checkbox"]:checked');
                 let $dataCustomer = $('input[type="radio"]:checked');
                 let $total = 0;
                 $dataProduct.each(function (index, element) {
                     $total += parseInt($(element).parent().parent().find('.js-price').html());
+
                     if(index == 0) {
                         $html = `
                         <div class="d-flex  align-center border ">
@@ -296,7 +342,9 @@
                                 <span>Số lượng:</span>
                             </div>
                             <div class="d-flex flex-column" style="margin-left:40px">
-                                <span class="fw-bold">${$(element).parent().parent().find('.js-name').html()}</span>
+                                <input type="hidden" class="js_quality" value="${$(element).parent().parent().find('.js-quality').html()}">
+                        
+                                <span class="fw-bold js-p-name">${$(element).parent().parent().find('.js-name').html()}</span>
                                 <span class="js-product-price-form fw-bold">${$(element).parent().parent().find('.js-price').html()}</span>
                                 <input type="number" class="js-quality-product" name="quality-product-${$(element).val()}" style="width:40px;height:32px" value="1">
                             </div>
@@ -311,8 +359,10 @@
                                 <span>Số lượng</span>
                             </div>
                             <div class="d-flex flex-column" style="margin-left:40px">
+                                 <input type="hidden" class="js_quality" value="${$(element).parent().parent().find('.js-quality').html()}">
+
                                 <span class="fw-bold">${$(element).parent().parent().find('.js-name').html()}</span>
-                                <span class="js-product-price-form fw-bold">${$(element).parent().parent().find('.js-price').html()}</span>
+                                <span class="js-product-price-form fw-bold js-p-name">${$(element).parent().parent().find('.js-price').html()}</span>
                                 <input type="number" class="js-quality-product" name="quality-product-${$(element).val()}" style="width:40px;height:32px" value="1">
                             </div>
                         </div>

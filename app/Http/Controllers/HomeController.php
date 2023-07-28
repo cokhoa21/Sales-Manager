@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Hash;
+
 
 class HomeController extends Controller
 {
@@ -13,8 +15,12 @@ class HomeController extends Controller
 
     public function banhang()
     {
+        $products = DB::table('products')->get();
+        foreach($products as $item){
+            $item->supplier = DB::table("brands")->find($item->supplier)->name;
+        }
         return view('banhang',[
-            'products' => DB::table('products')->get(),
+            'products' => $products,
             'customers' => DB::table('customers')->get(),
         ]);
     }
@@ -24,13 +30,18 @@ class HomeController extends Controller
         $quantity = $request->get('quantity');
         $price = $request->get('price');
         $price_cost = $request->get('price_cost');
-
+        $category = $request->get('category');
+        $sup = $request->get('sup');
+       
         DB::table('products')->insert([
             [
                 'name' => $name,
                 'quantity' => $quantity,
                 'price' => $price,
                 'price_cost' => $price_cost,
+                'category_id' =>  $category,
+                'supplier' => $sup,
+                'status'=> 1,
             ]
 
         ]);
@@ -61,26 +72,39 @@ class HomeController extends Controller
         $name = $request->get('name');
         $quantity = $request->get('quantity');
         $price = $request->get('price');
-        // dd($name,$quantity,$price);
+        $category = $request->get('category');
+        $price_cost = $request->get('price_cost');
+        $sup = $request->get('sup');
         DB::table('products')
             ->where('id', $id)
             ->update([
                 'name' => $name,
                 'quantity' => $quantity,
                 'price' => $price,
+                'price_cost' => $price_cost,
+                'category_id' =>  $category,
+                'supplier' => $sup
             ]);
         return redirect()->route('sanpham');
     }
     public function add_employee(Request $request)
     {
         $randomString = strval(rand(10000, 99999));
-        $email = $request->email;
+        $email = $request->get('email');
+        $name = $request->get('name');
+        $gender = $request->get('gender');
+        $address= $request->get("address");
+        $sdt = $request->get("sdt");
         DB::table('users')->insert([
             [
                 'email' => $email,
+                'name' =>$name,
+                'sdt' =>$sdt,
+                'gender' => $gender,
+                'address' => $address,
                 'role' => 0,
-                'password' => $randomString,
-            ],
+                'password' => Hash::make($randomString)
+            ]
         ]);
         $details = [
             'title' => 'Mật khẩu của bạn là',
@@ -97,12 +121,14 @@ class HomeController extends Controller
         $email = $request->email;
         $address = $request->address;
         $phone = $request->phone;
+        $note = $request->note;
         DB::table('customers')->insert([
             [
                 'email' => $email,
                 'name' => $name,
                 'address' => $address,
-                'phone' => $phone
+                'phone' => $phone,
+                'note'  => $note
             ],
         ]);
 
@@ -113,6 +139,7 @@ class HomeController extends Controller
     {
         $customer_id = null;
         $array_product = [];
+    
         foreach ($request->all() as $name => $value){
             if($name =='customer_id'){
                 $customer_id = $value;
@@ -122,6 +149,22 @@ class HomeController extends Controller
                 $array_product[$id] = $value;
             }
         }
+        $totalCost = 0;
+        $totalPrice = 0;
+        foreach ($array_product as $key => $value){
+            $product = DB::table('products')->where('id', '=', $key)->first();
+            $totalPrice += $product->price * $value;
+            $totalCost += $product->price_cost * $value;
+        }
+        $billdata = DB::table('bill')->insertGetId(
+            [
+                'customer_id' => $customer_id,
+                'nv_id' => Session::get('user')->id ?? 1,
+                'total_price' => $totalPrice,
+                'total_cost' =>  $totalCost,
+                'created_at' => date('Y-m-d')
+            ]
+        );
         foreach ($array_product as $key => $value){
             $product = DB::table('products')->where('id', '=', $key)->first();
             if($product->quantity < $value){
@@ -136,16 +179,16 @@ class HomeController extends Controller
                 ->update([
                     'quantity' => $quantity,
                 ]);
-            DB::table('bill')->insert(
+            DB::table('bill_detail')->insert(
                 [
-                    'customer_id' => $customer_id,
+                    'bill_id' => $billdata,
                     'product_id' => $key,
                     'quality' => $value,
-                    'nv_id' => Session::get('user')->id ?? 1,
                     'total_price' => $product->price * $value,
                     'total_cost' => $product->price_cost * $value,
                 ]
             );
+        
             $day = now()->day;
             $month = now()->month;
             $year = now()->year;
@@ -181,6 +224,17 @@ class HomeController extends Controller
         ]);
     }
 
+    public function bill_detail(Request $request){
+        $id = $request->id;
+        $data = DB::table('bill_detail')->where("bill_id",$id)->get();
+        foreach($data as $item){
+            $item->name = DB::table('products')->find($item->product_id)->name;
+        }
+        return view('donhangchitiet',[
+            'data' => $data
+        ]);
+    }
+
     public function delete_users(Request $request, $id){
         DB::table('users')->where('id', '=', $id)->delete();
         return redirect()->route('nhanvien');
@@ -205,10 +259,18 @@ class HomeController extends Controller
     }
     public function edit_users(Request $request,$id){
         $email = $request->get('email');
+        $name = $request->get('name');
+        $gender = $request->get('gender');
+        $address= $request->get("address");
+        $sdt = $request->get("sdt");
         DB::table('users')
             ->where('id', $id)
             ->update([
                 'email' => $email,
+                'name' =>$name,
+                'sdt' =>$sdt,
+                'gender' => $gender,
+                'address' => $address,
             ]);
         return redirect()->route('nhanvien');
     }
@@ -218,13 +280,16 @@ class HomeController extends Controller
         $name = $request->get('name');
         $address = $request->get('address');
         $phone = $request->get('phone');
+        $note = $request->get("note");
+
         DB::table('customers')
             ->where('id', $id)
             ->update([
                 'email' => $email,
                 'name' => $name,
                 'address' => $address,
-                'phone' => $phone
+                'phone' => $phone,
+                'note' => $note,
             ]);
         return redirect()->route('khachhang');
     }
